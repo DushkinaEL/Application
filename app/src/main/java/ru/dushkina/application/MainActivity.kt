@@ -7,26 +7,32 @@ import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
             setContentView(R.layout.activity_main)
+
+        initButtons()
         }
 
-
-     fun initButtonsMenu(view: View) {
-            Toast.makeText(this, "Меню", Toast.LENGTH_SHORT).show()
-        }
-    fun initBtnFavorite(view: View){
-            Toast.makeText(this, "Избранное", Toast.LENGTH_SHORT).show()
-        }
-    fun initBtnWatchLater(view: View){
-            Toast.makeText(this, "Посмотреть позже", Toast.LENGTH_SHORT).show()
-        }
-    fun initBtnSelection(view: View) {
-            Toast.makeText(this, "Подборки", Toast.LENGTH_SHORT).show()
-        }
-    fun initBtnSettings(view: View){
-            Toast.makeText(this, "Настройки", Toast.LENGTH_SHORT).show()
-        }
+private fun initButtons(){
+    button_menu.setOnClickListener {
+    Toast.makeText(this, "Меню", Toast.LENGTH_SHORT).show()
+}
+    button_favorite.setOnClickListener {
+        Toast.makeText(this, "Избранное", Toast.LENGTH_SHORT).show()
     }
+    button_watckLater.setOnClickListener {
+        Toast.makeText(this, "Посмотреть позже", Toast.LENGTH_SHORT).show()
+    }
+    button_selection.setOnClickListener {
+        Toast.makeText(this, "Подборки", Toast.LENGTH_SHORT).show()
+    }
+
+    button_settings.setOnClickListener {
+        Toast.makeText(this, "Настройки", Toast.LENGTH_SHORT).show()
+    }
+
+}
+}
 
