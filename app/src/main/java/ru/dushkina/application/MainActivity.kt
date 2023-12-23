@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         binding.topAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.settings -> {
