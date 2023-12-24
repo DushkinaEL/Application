@@ -4,16 +4,16 @@
     <item
         android:id="@+id/favorites"
         android:icon="@drawable/baseline_favorite_"
-        android:title="@string/btn_favorite"
+        android:title="@string/favorite"
         app:showAsAction="withText"/>
     <item
         android:id="@+id/watch_later"
         android:icon="@drawable/baseline_class_later"
-        android:title="@string/btn_watchLater"
+        android:title="@string/watchLater"
         app:showAsAction="withText"/>
     <item
         android:id="@+id/selections"
         android:icon="@drawable/baseline_bookmark_"
-        android:title="@string/btn_selection"
+        android:title="@string/selection"
         app:showAsAction="withText"/>
 </menu>

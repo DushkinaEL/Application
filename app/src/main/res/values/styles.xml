@@ -6,4 +6,5 @@
         <item name="android:background">?selectableItemBackgroundBorderless</item>
         <item name="android:textAppearance">@style/TextShadow</item>
     </style>
+
 </resources>
