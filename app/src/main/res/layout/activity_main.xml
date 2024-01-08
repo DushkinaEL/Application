@@ -21,7 +21,8 @@
             app:title="@string/app_name"
             app:navigationIcon="@drawable/round_align_horizontal_left_24_menu"
             app:menu="@menu/top_app_bar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:stateListAnimator="@animator/elevation"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -86,6 +87,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:id="@+id/disclaimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -96,7 +98,7 @@
         android:linksClickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top_bar"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -108,5 +110,89 @@
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/navigation_menu" />
+
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:useDefaultMargins="true"
+        app:layout_constraintTop_toBottomOf="@+id/disclaimer"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layoutAnimation="@anim/layout_anim">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/poster_1"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            app:cardCornerRadius="15dp">
+
+            <ImageView
+                android:id="@+id/room"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/poster_1"
+                android:scaleType="centerCrop"
+                android:clickable="true"
+                android:stateListAnimator="@animator/poster_click_animation"
+                android:contentDescription="Enter How Much Cookies You Want"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/poster_2"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            app:cardCornerRadius="15dp">
+
+            <ImageView
+                android:id="@+id/friends"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/poster_2"
+                android:scaleType="centerCrop"
+                android:clickable="true"
+                android:stateListAnimator="@animator/poster_click_animation"
+                android:contentDescription="Enter How Much Cookies You Want"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/poster_3"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            app:cardCornerRadius="15dp">
+
+            <ImageView
+                android:id="@+id/exorcist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/poster_3"
+                android:scaleType="centerCrop"
+                android:clickable="true"
+                android:stateListAnimator="@animator/poster_click_animation"
+                android:contentDescription="Enter How Much Cookies You Want"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/poster_4"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            app:cardCornerRadius="15dp">
+
+            <ImageView
+                android:id="@+id/mad_max"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/poster_4"
+                android:scaleType="centerCrop"
+                android:clickable="true"
+                android:stateListAnimator="@animator/poster_click_animation"
+                android:contentDescription="Enter How Much Cookies You Want"/>
+        </androidx.cardview.widget.CardView>
+
+    </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
