@@ -30,6 +30,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.topAppBar.setNavigationOnClickListener {
+            Toast.makeText(this, "Когда-нибудь здесь будет навигация...", Toast.LENGTH_SHORT).show()
+        }
+
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener() {
 
@@ -40,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.watch_later -> {
-                    Toast.makeText(this, "Посмотреть похже", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Посмотреть позже", Toast.LENGTH_SHORT).show()
                     true
                 }
 

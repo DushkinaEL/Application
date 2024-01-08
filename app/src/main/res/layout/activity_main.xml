@@ -21,7 +21,8 @@
             app:title="@string/app_name"
             app:navigationIcon="@drawable/round_align_horizontal_left_24_menu"
             app:menu="@menu/top_app_bar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:stateListAnimator="@animator/elevation"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -97,7 +98,7 @@
         android:linksClickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top_bar"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -137,7 +138,8 @@
                 android:src="@drawable/poster_1"
                 android:scaleType="centerCrop"
                 android:clickable="true"
-                android:stateListAnimator="@animator/poster_click_animation"/>
+                android:stateListAnimator="@animator/poster_click_animation"
+                android:contentDescription="Enter How Much Cookies You Want"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -153,7 +155,8 @@
                 android:src="@drawable/poster_2"
                 android:scaleType="centerCrop"
                 android:clickable="true"
-                android:stateListAnimator="@animator/poster_click_animation"/>
+                android:stateListAnimator="@animator/poster_click_animation"
+                android:contentDescription="Enter How Much Cookies You Want"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -169,7 +172,8 @@
                 android:src="@drawable/poster_3"
                 android:scaleType="centerCrop"
                 android:clickable="true"
-                android:stateListAnimator="@animator/poster_click_animation"/>
+                android:stateListAnimator="@animator/poster_click_animation"
+                android:contentDescription="Enter How Much Cookies You Want"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -185,7 +189,8 @@
                 android:src="@drawable/poster_4"
                 android:scaleType="centerCrop"
                 android:clickable="true"
-                android:stateListAnimator="@animator/poster_click_animation"/>
+                android:stateListAnimator="@animator/poster_click_animation"
+                android:contentDescription="Enter How Much Cookies You Want"/>
         </androidx.cardview.widget.CardView>
 
     </GridLayout>
