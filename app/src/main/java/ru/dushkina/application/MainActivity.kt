@@ -1,5 +1,6 @@
 package ru.dushkina.application
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -36,7 +37,13 @@ class MainActivity : AppCompatActivity() {
             binding.mainRecycler.apply {
 
             filmsAdapter = FilmListRecyclerAdapter (object : FilmListRecyclerAdapter.OnItemClickListener {
-                override fun click(film: Film) {}
+                override fun click(film: Film) {
+                    val bundle = Bundle()
+                    bundle.putParcelable("film", film)
+                    val intent = Intent(this@MainActivity, DetailsActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
             })
                 adapter = filmsAdapter
                 layoutManager = LinearLayoutManager(this@MainActivity)
