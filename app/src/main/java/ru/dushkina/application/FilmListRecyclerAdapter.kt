@@ -6,9 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBindings
-import ru.dushkina.application.databinding.ActivityDetailsBinding
-import ru.dushkina.application.databinding.ActivityMainBinding
 import ru.dushkina.application.databinding.FilmItemBinding
 
 class FilmListRecyclerAdapter(private val clickListener:OnItemClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
