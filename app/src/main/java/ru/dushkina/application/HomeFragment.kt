@@ -14,7 +14,9 @@ import ru.dushkina.application.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    private var binding: FragmentHomeBinding? = null
+    private var _binding: FragmentHomeBinding? = null
+    private val binding: FragmentHomeBinding
+        get() = _binding!!
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
     private val filmsDataBase = listOf(
@@ -34,15 +36,14 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-        return binding!!.root
+        _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        return binding.root
         // Inflate the layout for this fragment
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentHomeBinding.inflate(layoutInflater)
-        binding!!.mainRecycler.apply {
+        binding.mainRecycler.apply {
             filmsAdapter =
                 FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
                     override fun click(film: Film) {

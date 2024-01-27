@@ -3,6 +3,7 @@ package ru.dushkina.application
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import ru.dushkina.application.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -75,6 +76,24 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragment_placeholder, fragment)
             .addToBackStack(null)
             .commit()
+
+    }
+
+    override fun onBackPressed() {
+        if(supportFragmentManager.backStackEntryCount == 1){
+            AlertDialog.Builder(this)
+                .setMessage("Вы точно хотите выйти?")
+                .setIcon(R.drawable.baseline_browse_gallery)
+                .setNegativeButton("Нет"){dialog, id ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Да"){dialog, id ->
+                    finish()
+                }
+                .show()
+        }else{
+            super.onBackPressed()
+        }
 
     }
 }
