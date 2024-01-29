@@ -1,5 +1,6 @@
 package ru.dushkina.application
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private var _binding: FragmentDetailsBinding? = null
     private val binding: FragmentDetailsBinding
         get() = _binding!!
+    private lateinit var  film: Film
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,15 +29,38 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setFilmsDetails()
+        binding.detailsFabFavorites.setOnClickListener{
+            if (!film.isInFavorites) {
+                binding.detailsFabFavorites.setImageResource(R.drawable.baseline_favorite_)
+                film.isInFavorites = true
+            } else {
+                binding.detailsFabFavorites.setImageResource(R.drawable.baseline_favorite_border_24)
+                film.isInFavorites = false
+            }
+        }
+        binding.detailsFabShare.setOnClickListener{
+            val intent = Intent()
+            intent.action = Intent.ACTION_SEND
+            intent.putExtra(
+                Intent.EXTRA_TEXT,
+                "Check out this film: ${film.title} \n\n ${film.description}"
+            )
+            intent.type = "text/plain"
+            startActivity(Intent.createChooser(intent, "Share To:"))
+        }
     }
 
     private fun setFilmsDetails() {
-        val film = arguments?.get("film") as Film
+         film = arguments?.get("film") as Film
 
         with(binding) {
             detailsToolbar.title = film.title
             detailsPoster.setImageResource(film.poster)
             detailsDescription.text = film.description
+            detailsFabFavorites.setImageResource(
+                if (film.isInFavorites) R.drawable.baseline_favorite_
+                else R.drawable.baseline_favorite_border_24
+            )
         }
     }
 }
