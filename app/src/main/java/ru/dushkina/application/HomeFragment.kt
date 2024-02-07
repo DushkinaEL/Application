@@ -2,13 +2,21 @@ package ru.dushkina.application
 
 import android.content.Intent
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.Scene
+import android.transition.Slide
+import android.transition.TransitionManager
+import android.transition.TransitionSet
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.dushkina.application.databinding.FragmentHomeBinding
+import ru.dushkina.application.databinding.MergeHomeScreenContentBinding
 import java.util.Locale
 
 class HomeFragment : Fragment() {
@@ -16,6 +24,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding
         get() = _binding!!
+    private lateinit var bindingScene: MergeHomeScreenContentBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
     private val filmsDataBase = listOf(
@@ -70,6 +79,10 @@ class HomeFragment : Fragment() {
             "Дон Вито Корлеоне, глава мафиозной семьи, решает передать свою империю младшему сыну Майклу. Однако его решение непреднамеренно подвергает жизни его близких серьезной опасности."
         )
     )
+    init {
+        exitTransition = Slide(Gravity.START).apply { duration = 800; mode = Slide.MODE_OUT }
+        reenterTransition = Slide(Gravity.START).apply { duration = 800;}
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,55 +90,80 @@ class HomeFragment : Fragment() {
     ): View? {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         return binding.root
+    }
 
+    override fun onStart() {
+        super.onStart()
+        view?.setOnClickListener{
+            val a = activity as FragmentActivity
+            a.supportFragmentManager.beginTransaction().replace(com.google.android.material.R.id.container, DetailsFragment()).addToBackStack("MainFragment").commit()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding) {
+        bindingScene = MergeHomeScreenContentBinding.inflate(layoutInflater, binding.homeFragmentRoot, false)
 
-            // Для работы при нажатии на поле для поиска
-            searchView.setOnClickListener {
-                searchView.isIconified = false
-            }
-            //Подключаем слушателя изменений введенного текста в поле для поиска
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return true
+            val scene = Scene(binding.homeFragmentRoot, bindingScene.root)
+        //Создаем анимацию выезда поля поиска сверху
+        val searchSlide = Slide(Gravity.TOP).addTarget(R.id.search_view)
+        //Создаем анимацию выезда RV снизу
+        val recyclerSlide = Slide (Gravity.BOTTOM).addTarget(R.id.main_recycler)
+        //Создаем экземпляр TransitionSet, для объединения анимаций
+        val customTransition = TransitionSet().apply {
+            //Устанавливаем время анимации
+            duration = 1000
+            //Добавляем анимации
+            addTransition(searchSlide)
+            addTransition(recyclerSlide)
+        }
+        //Запускаем через TransitionManager, вторым параметром передаем нашу кастомную анимацию
+        TransitionManager.go(scene, customTransition)
+
+            with(bindingScene) {
+                // Для работы при нажатии на поле для поиска
+                searchView.setOnClickListener {
+                    searchView.isIconified = false
                 }
-
-                //Этот метод отрабатывает на каждое изменение текста
-                override fun onQueryTextChange(newText: String): Boolean {
-
-                    //Если ввод пуст, то вставляем в адаптер всю БД
-                    if (newText.isEmpty()) {
-                        filmsAdapter.addItems(filmsDataBase)
+                //Подключаем слушателя изменений введенного текста в поле для поиска
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
+                    override fun onQueryTextSubmit(query: String?): Boolean {
                         return true
                     }
-                    //Фильтруем список на поиск подходящих сочетаний
-                    val result = filmsDataBase.filter {
-                        //Приводим запрос и имя фильма к нижнему регистру
-                        it.title.toLowerCase(Locale.getDefault()).contains(
-                            newText.toLowerCase(
-                                Locale.getDefault()
+
+                    //Этот метод отрабатывает на каждое изменение текста
+                    override fun onQueryTextChange(newText: String): Boolean {
+
+                        //Если ввод пуст, то вставляем в адаптер всю БД
+                        if (newText.isEmpty()) {
+                            filmsAdapter.addItems(filmsDataBase)
+                            return true
+                        }
+                        //Фильтруем список на поиск подходящих сочетаний
+                        val result = filmsDataBase.filter {
+                            //Приводим запрос и имя фильма к нижнему регистру
+                            it.title.toLowerCase(Locale.getDefault()).contains(
+                                newText.toLowerCase(
+                                    Locale.getDefault()
+                                )
                             )
-                        )
+                        }
+                        //Добавляем в адаптер
+                        filmsAdapter.addItems(result)
+                        return true
                     }
-                    //Добавляем в адаптер
-                    filmsAdapter.addItems(result)
-                    return true
-                }
-            })
-            //Находим наш RV
-            initRecycler()
-            //Кладем БД в RV
-            filmsAdapter.addItems(filmsDataBase)
+                })
+                //Находим наш RV
+                initRecycler()
+                //Кладем БД в RV
+                filmsAdapter.addItems(filmsDataBase)
+
 
         }
     }
         private fun initRecycler() {
-            binding.mainRecycler.apply {
+            bindingScene.mainRecycler.apply {
                 filmsAdapter =
                     FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
                         override fun click(film: Film) {

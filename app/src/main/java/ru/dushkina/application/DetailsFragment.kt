@@ -2,6 +2,8 @@ package ru.dushkina.application
 
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Slide
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,11 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private val binding: FragmentDetailsBinding
         get() = _binding!!
     private lateinit var  film: Film
+
+    init {
+        enterTransition = Slide(Gravity.END).apply { duration = 800 }
+        returnTransition = Slide(Gravity.END).apply { duration = 800; mode = Slide.MODE_OUT }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
