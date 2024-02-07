@@ -2,6 +2,11 @@ package ru.dushkina.application
 
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Scene
+import android.transition.Slide
+import android.transition.TransitionManager
+import android.transition.TransitionSet
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.dushkina.application.databinding.FragmentHomeBinding
+import ru.dushkina.application.databinding.MergeHomeScreenContentBinding
 import java.util.Locale
 
 class HomeFragment : Fragment() {
@@ -16,6 +22,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding
         get() = _binding!!
+    private lateinit var bindingScene: MergeHomeScreenContentBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
     private val filmsDataBase = listOf(
@@ -82,8 +89,25 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding) {
+        bindingScene = MergeHomeScreenContentBinding.inflate(layoutInflater, binding.homeFragmentRoot, false)
 
+            val scene = Scene(binding.homeFragmentRoot, bindingScene.root)
+        //Создаем анимацию выезда поля поиска сверху
+        val searchSlide = Slide(Gravity.TOP).addTarget(R.id.search_view)
+        //Создаем анимацию выезда RV снизу
+        val recyclerSlide = Slide (Gravity.BOTTOM).addTarget(R.id.main_recycler)
+        //Создаем экземпляр TransitionSet, для объединения анимаций
+        val customTransition = TransitionSet().apply {
+            //Устанавливаем время анимации
+            duration = 1000
+            //Добавляем анимации
+            addTransition(searchSlide)
+            addTransition(recyclerSlide)
+        }
+        //Запускаем через TransitionManager, вторым параметром передаем нашу кастомную анимацию
+        TransitionManager.go(scene, customTransition)
+
+            with(bindingScene) {
             // Для работы при нажатии на поле для поиска
             searchView.setOnClickListener {
                 searchView.isIconified = false
@@ -125,7 +149,7 @@ class HomeFragment : Fragment() {
         }
     }
         private fun initRecycler() {
-            binding.mainRecycler.apply {
+            bindingScene.mainRecycler.apply {
                 filmsAdapter =
                     FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
                         override fun click(film: Film) {
