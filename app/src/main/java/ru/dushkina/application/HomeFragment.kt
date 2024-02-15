@@ -24,7 +24,6 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding
         get() = _binding!!
-    private lateinit var bindingScene: MergeHomeScreenContentBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
     private val filmsDataBase = listOf(
@@ -79,10 +78,6 @@ class HomeFragment : Fragment() {
             "Дон Вито Корлеоне, глава мафиозной семьи, решает передать свою империю младшему сыну Майклу. Однако его решение непреднамеренно подвергает жизни его близких серьезной опасности."
         )
     )
-    init {
-        exitTransition = Slide(Gravity.START).apply { duration = 800; mode = Slide.MODE_OUT }
-        reenterTransition = Slide(Gravity.START).apply { duration = 800;}
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,31 +97,17 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindingScene = MergeHomeScreenContentBinding.inflate(layoutInflater, binding.homeFragmentRoot, false)
 
-            val scene = Scene(binding.homeFragmentRoot, bindingScene.root)
-        //Создаем анимацию выезда поля поиска сверху
-        val searchSlide = Slide(Gravity.TOP).addTarget(R.id.search_view)
-        //Создаем анимацию выезда RV снизу
-        val recyclerSlide = Slide (Gravity.BOTTOM).addTarget(R.id.main_recycler)
-        //Создаем экземпляр TransitionSet, для объединения анимаций
-        val customTransition = TransitionSet().apply {
-            //Устанавливаем время анимации
-            duration = 1000
-            //Добавляем анимации
-            addTransition(searchSlide)
-            addTransition(recyclerSlide)
-        }
-        //Запускаем через TransitionManager, вторым параметром передаем нашу кастомную анимацию
-        TransitionManager.go(scene, customTransition)
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot,  requireActivity(), 1)
 
-            with(bindingScene) {
+            with(binding) {
                 // Для работы при нажатии на поле для поиска
                 searchView.setOnClickListener {
                     searchView.isIconified = false
                 }
                 //Подключаем слушателя изменений введенного текста в поле для поиска
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+                    androidx.appcompat.widget.SearchView.OnQueryTextListener {
                     //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         return true
@@ -163,7 +144,7 @@ class HomeFragment : Fragment() {
         }
     }
         private fun initRecycler() {
-            bindingScene.mainRecycler.apply {
+            binding.mainRecycler.apply {
                 filmsAdapter =
                     FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
                         override fun click(film: Film) {
