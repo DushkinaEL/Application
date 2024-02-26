@@ -1,5 +1,6 @@
 package ru.dushkina.application
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -18,8 +19,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
         supportFragmentManager
             .beginTransaction()
@@ -121,8 +120,8 @@ class MainActivity : AppCompatActivity() {
         }else{
             super.onBackPressed()
         }
-
     }
 }
+
 
 
