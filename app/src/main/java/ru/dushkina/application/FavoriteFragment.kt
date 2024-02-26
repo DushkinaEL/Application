@@ -27,6 +27,8 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.favoriteFragment, requireActivity(), 1)
+
         val favoritesList: List<Film> = emptyList()
 
         binding.favoritesRecycler
