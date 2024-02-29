@@ -29,7 +29,7 @@ class FilmViewHolder(private var binding: FilmItemBinding) : RecyclerView.ViewHo
         // Устанавливаем описание
         description.text = film.description
         // Устанавливаем рейтинг
-        ratingDonut.setProgress((film.rating * 10 ).toInt())
+        ratingDonut.setProgressAnimated((film.rating * 10 ).toInt())
     }
 }
 

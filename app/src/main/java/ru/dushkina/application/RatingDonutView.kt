@@ -1,6 +1,7 @@
 package ru.dushkina.application
 
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -151,6 +152,20 @@ class RatingDonutView @JvmOverloads constructor(context: Context, attributeSet: 
         // Создаем краски с новыми цветами
         initPaint()
         // Вызываем перерисовку  View
+        invalidate()
+    }
+
+    fun setProgressAnimated(pr: Int) {
+        ValueAnimator.ofInt(0,pr).apply {
+            addUpdateListener {
+                val value = it.animatedValue as Int
+                progress = value
+                invalidate()
+            }
+            duration = 2000
+        }.start()
+        progress = pr
+        initPaint()
         invalidate()
     }
 }
