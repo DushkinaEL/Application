@@ -1,6 +1,8 @@
 package ru.dushkina.application
 
 
+import android.animation.Keyframe
+import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -146,23 +148,19 @@ class RatingDonutView @JvmOverloads constructor(context: Context, attributeSet: 
         drawText(canvas)
     }
 
-    fun setProgress(pr: Int) {
-        //Кладем новое значение в наше поле класса
-        progress = pr
-        // Создаем краски с новыми цветами
-        initPaint()
-        // Вызываем перерисовку  View
-        invalidate()
-    }
-
     fun setProgressAnimated(pr: Int) {
-        ValueAnimator.ofInt(0,pr).apply {
+        val pvhprogress = PropertyValuesHolder.ofInt("progress", 0, pr)
+        val pvhalpha = PropertyValuesHolder.ofFloat("alpha", 0f, 1f)
+
+        ValueAnimator.ofPropertyValuesHolder(pvhprogress,pvhalpha).apply {
             addUpdateListener {
-                val value = it.animatedValue as Int
-                progress = value
+                val valueProgress = it.getAnimatedValue("progress") as Int
+                val valueAlpha = it.getAnimatedValue("alpha") as Float
+                progress = valueProgress
+                alpha = valueAlpha
                 invalidate()
             }
-            duration = 2000
+            duration = 3000
         }.start()
         progress = pr
         initPaint()
