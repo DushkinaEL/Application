@@ -1,4 +1,4 @@
-package ru.dushkina.application
+package ru.dushkina.application.view.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.dushkina.application.view.rv_adapters.FilmListRecyclerAdapter
+import ru.dushkina.application.view.MainActivity
+import ru.dushkina.application.view.rv_adapters.TopSpacingItemDecoration
 import ru.dushkina.application.databinding.FragmentFavoriteBinding
+import ru.dushkina.application.domain.Film
+import ru.dushkina.application.utils.AnimationHelper
+
 class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentFavoriteBinding? = null

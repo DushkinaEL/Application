@@ -1,4 +1,4 @@
-package ru.dushkina.application
+package ru.dushkina.application.view.rv_adapters
 
 import android.content.res.Resources
 import android.graphics.Rect

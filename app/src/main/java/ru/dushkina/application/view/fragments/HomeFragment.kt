@@ -1,4 +1,4 @@
-package ru.dushkina.application
+package ru.dushkina.application.view.fragments
 
 
 import android.os.Bundle
@@ -8,8 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import ru.dushkina.application.view.rv_adapters.FilmListRecyclerAdapter
+import ru.dushkina.application.view.MainActivity
+import ru.dushkina.application.R
+import ru.dushkina.application.view.rv_adapters.TopSpacingItemDecoration
 import ru.dushkina.application.databinding.FragmentHomeBinding
+import ru.dushkina.application.domain.Film
+import ru.dushkina.application.utils.AnimationHelper
+import ru.dushkina.application.viewmodel.HomeFragmentViewModel
 import java.util.Locale
 
 class HomeFragment : Fragment() {
@@ -19,58 +29,20 @@ class HomeFragment : Fragment() {
         get() = _binding!!
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
-    private val filmsDataBase = listOf(
-        Film(
-            "Leon",
-            R.drawable.poster_5,
-            "12-летнюю Матильду неохотно принимает Леон, профессиональный убийца, после того, как ее семья была убита. Необычные отношения складываются, когда она становится его протеже и осваивает ремесло убийцы.", 8.9f
-        ),
-        Film(
-            "Se7en",
-            R.drawable.poster_7,
-            "Два детектива, новичок и ветеран, выслеживают серийного убийцу, мотивом которого являются семь смертных грехов.",6.6f
-        ),
-        Film(
-            "Coco",
-            R.drawable.poster_14,
-            "Начинающий музыкант Мигель, столкнувшись с наследственным запретом на музыку в своей семье, отправляется в Страну Мертвых, чтобы найти своего прапрадеда, легендарного певца.",8.4f
-        ),
-        Film(
-            "Forrest Gump",
-            R.drawable.poster_13,
-            "История Соединенных Штатов с 1950-х по 70-е годы разворачивается с точки зрения жителя Алабамы с IQ 75, который жаждет воссоединения со своей возлюбленной детства.",3.4f
-        ),
-        Film(
-            "Joker",
-            R.drawable.poster_12,
-            "В 1980-е годы неудавшийся стендап-комик сходит с ума и ведет преступную и хаосную жизнь в Готэм-сити, становясь при этом печально известным криминальным психопатом.",9.4f
-        ),
-        Film(
-            "Parasite",
-            R.drawable.poster_11,
-            "Жадность и классовая дискриминация угрожают недавно сформировавшимся симбиотическим отношениям между богатой семьей Пак и обездоленным кланом Кимов.",7.3f
-        ),
-        Film(
-            "1+1",
-            R.drawable.poster_10,
-            "После того, как он стал парализованным из-за несчастного случая при полете на параплане, аристократ нанимает молодого человека из проекта в качестве его опекуна.",8.4f
-        ),
-        Film(
-            "Pulp Fiction",
-            R.drawable.poster_6,
-            "Жизни двух наемных убийц, боксера, гангстера и его жены, а также пары бандитов из закусочной переплетаются в четырех историях о насилии и искуплении.", 3.2f
-        ),
-        Film(
-            "Spider-Man: Across the Spider-Verse",
-            R.drawable.poster_8,
-            "Майлз Моралес катапультируется через мультивселенную, где встречает команду Людей-Пауков, которой поручено защищать само ее существование. Когда герои спорят о том, как справиться с новой угрозой, Майлзу приходится по-новому определить, что значит быть героем.",8.6f
-        ),
-        Film(
-            "The Godfather",
-            R.drawable.poster_9,
-            "Дон Вито Корлеоне, глава мафиозной семьи, решает передать свою империю младшему сыну Майклу. Однако его решение непреднамеренно подвергает жизни его близких серьезной опасности.", 2.1f
-        )
-    )
+    private val viewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
+    }
+
+    private var filmsDataBase = listOf<Film>()
+        //Используем backing field
+        set(value) {
+            //Если придет такое же значение, то мы выходим из метода
+            if (field == value) return
+            //Если пришло другое значение, то кладем его в переменную
+            field = value
+            //Обновляем RV адаптер
+            filmsAdapter.addItems(field)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,6 +62,11 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // подписываемся на изменения viewModel
+        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer <List<Film>> {
+            filmsDataBase = it
+        })
 
         AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot,  requireActivity(), 1)
 

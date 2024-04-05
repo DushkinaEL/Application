@@ -1,4 +1,4 @@
-package ru.dushkina.application
+package ru.dushkina.application.view
 
 
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,14 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import ru.dushkina.application.R
 import ru.dushkina.application.databinding.ActivityMainBinding
+import ru.dushkina.application.domain.Film
+import ru.dushkina.application.view.fragments.DetailsFragment
+import ru.dushkina.application.view.fragments.FavoriteFragment
+import ru.dushkina.application.view.fragments.HomeFragment
+import ru.dushkina.application.view.fragments.SelectionsFragment
+import ru.dushkina.application.view.fragments.WatchLaterFragment
 
 class MainActivity : AppCompatActivity() {
 

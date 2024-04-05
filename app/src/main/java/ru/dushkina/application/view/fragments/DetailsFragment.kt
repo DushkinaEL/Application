@@ -1,4 +1,4 @@
-package ru.dushkina.application
+package ru.dushkina.application.view.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import ru.dushkina.application.R
 import ru.dushkina.application.databinding.FragmentDetailsBinding
+import ru.dushkina.application.domain.Film
 
 class DetailsFragment : Fragment(R.layout.fragment_details) {
     private var _binding: FragmentDetailsBinding? = null

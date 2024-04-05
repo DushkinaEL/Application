@@ -1,11 +1,10 @@
-package ru.dushkina.application
+package ru.dushkina.application.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.airbnb.lottie.LottieAnimationView
 import ru.dushkina.application.databinding.ActivitySplashScreenBinding
 
 class SplashScreen : AppCompatActivity() {
