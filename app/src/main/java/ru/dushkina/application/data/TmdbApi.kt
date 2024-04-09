@@ -1,8 +1,9 @@
-package ru.dushkina.application.data.Entity
+package ru.dushkina.application.data
 
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
+import ru.dushkina.application.data.Entity.TmdbResultsDto
 
 interface TmdbApi {
     @GET("3/movie/popular")

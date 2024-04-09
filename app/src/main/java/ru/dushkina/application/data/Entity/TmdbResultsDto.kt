@@ -1,6 +1,7 @@
 package ru.dushkina.application.data.Entity
 
 import com.google.gson.annotations.SerializedName
+import ru.dushkina.application.data.Entity.TmdbFilm
 
 data class TmdbResultsDto(
     @SerializedName("page")
