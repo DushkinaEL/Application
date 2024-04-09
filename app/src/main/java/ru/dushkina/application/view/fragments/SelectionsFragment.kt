@@ -1,4 +1,4 @@
-package ru.dushkina.application
+package ru.dushkina.application.view.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,25 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ru.dushkina.application.databinding.FragmentSelectionsBinding
-import ru.dushkina.application.databinding.FragmentWatchLaterBinding
+import ru.dushkina.application.utils.AnimationHelper
 
-class WatchLaterFragment : Fragment() {
-    private var _binding: FragmentWatchLaterBinding? = null
-    private val binding: FragmentWatchLaterBinding
+
+class SelectionsFragment : Fragment() {
+    private var _binding: FragmentSelectionsBinding? = null
+    private val binding: FragmentSelectionsBinding
         get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentWatchLaterBinding.inflate(inflater, container, false)
+        _binding = FragmentSelectionsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        AnimationHelper.performFragmentCircularRevealAnimation(binding.watchLaterFragment, requireActivity(), 1)
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.selectionsFragment, requireActivity(), 1)
     }
 }

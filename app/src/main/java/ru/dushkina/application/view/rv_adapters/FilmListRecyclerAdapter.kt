@@ -1,14 +1,13 @@
-package ru.dushkina.application
+package ru.dushkina.application.view.rv_adapters
 
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import androidx.recyclerview.widget.RecyclerView
+import ru.dushkina.application.view.rv_viewholders.FilmViewHolder
 import ru.dushkina.application.databinding.FilmItemBinding
+import ru.dushkina.application.domain.Film
 
-class FilmListRecyclerAdapter(private val clickListener:OnItemClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val items = mutableListOf<Film>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

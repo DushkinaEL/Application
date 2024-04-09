@@ -1,9 +1,10 @@
-package ru.dushkina.application
+package ru.dushkina.application.view.rv_viewholders
 
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.dushkina.application.databinding.FilmItemBinding
+import ru.dushkina.application.domain.Film
 
 class FilmViewHolder(private var binding: FilmItemBinding) : RecyclerView.ViewHolder(binding.root) {
     //Привязываем View из layout к переменным

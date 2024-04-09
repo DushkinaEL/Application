@@ -1,7 +1,6 @@
-package ru.dushkina.application
+package ru.dushkina.application.view.customviews
 
 
-import android.animation.Keyframe
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
 import android.content.Context
@@ -12,6 +11,7 @@ import android.graphics.RectF
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
+import ru.dushkina.application.R
 
 class RatingDonutView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null): View(context, attributeSet) {
     // Овал для рисования сегментов прогресс бара
