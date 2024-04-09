@@ -1,4 +1,4 @@
-package ru.dushkina.application.Entity
+package ru.dushkina.application.data.Entity
 
 object ApiConstants {
     const val BASE_URL = "https://api.themoviedb.org/"

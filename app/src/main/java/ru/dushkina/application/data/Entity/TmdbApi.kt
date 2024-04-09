@@ -1,4 +1,4 @@
-package ru.dushkina.application.Entity
+package ru.dushkina.application.data.Entity
 
 import retrofit2.Call
 import retrofit2.http.GET
