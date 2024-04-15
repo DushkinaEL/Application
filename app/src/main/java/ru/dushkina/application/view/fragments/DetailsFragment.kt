@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import ru.dushkina.application.R
+import ru.dushkina.application.data.ApiConstants
 import ru.dushkina.application.databinding.FragmentDetailsBinding
 import ru.dushkina.application.domain.Film
 
@@ -62,9 +64,13 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
     private fun setFilmsDetails() {
          film = arguments?.get("film") as Film
 
+        Glide.with(this)
+            .load(ApiConstants.IMAGES_URL + "w780" + film.poster)
+            .centerCrop()
+            .into(binding.detailsPoster)
+
         with(binding) {
             detailsToolbar.title = film.title
-            detailsPoster.setImageResource(film.poster)
             detailsDescription.text = film.description
             detailsFabFavorites.setImageResource(
                 if (film.isInFavorites) R.drawable.baseline_favorite_
