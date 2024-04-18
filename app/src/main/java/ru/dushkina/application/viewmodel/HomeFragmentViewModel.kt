@@ -5,12 +5,17 @@ import androidx.lifecycle.ViewModel
 import ru.dushkina.application.App
 import ru.dushkina.application.domain.Film
 import ru.dushkina.application.domain.Interactor
+import javax.inject.Inject
 
 class HomeFragmentViewModel: ViewModel() {
     val filmsListLiveData: MutableLiveData<List<Film>> = MutableLiveData()
     //Инициализируем интерактор
-    private var interactor: Interactor = App.instance.interactor
+
+
+    @Inject
+    lateinit var interactor: Interactor
     init {
+        App.instance.dagger.inject(this)
         interactor.getFilmsFromApi(1, object : ApiCallback{
             override fun onSuccess(films: List<Film>) {
                 filmsListLiveData.postValue(films)
