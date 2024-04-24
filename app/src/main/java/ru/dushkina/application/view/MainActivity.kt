@@ -13,6 +13,7 @@ import ru.dushkina.application.view.fragments.DetailsFragment
 import ru.dushkina.application.view.fragments.FavoriteFragment
 import ru.dushkina.application.view.fragments.HomeFragment
 import ru.dushkina.application.view.fragments.SelectionsFragment
+import ru.dushkina.application.view.fragments.SettingsFragment
 import ru.dushkina.application.view.fragments.WatchLaterFragment
 
 class MainActivity : AppCompatActivity() {
@@ -76,6 +77,13 @@ class MainActivity : AppCompatActivity() {
                         val tag = "home"
                         val fragment = checkFragmentExistence(tag)
                         changeFragment(fragment?: HomeFragment(), tag)
+                        true
+                    }
+
+                    R.id.settings -> {
+                        val tag = "settings"
+                        val fragment = checkFragmentExistence(tag)
+                        changeFragment(fragment?: SettingsFragment(), tag)
                         true
                     }
 

@@ -20,4 +20,9 @@
         android:id="@+id/home"
         android:icon="@drawable/baseline_home_24"
         android:title="@string/menu_home_title_text"/>
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/baseline_settings_applications"
+        android:title="@string/settings_title_text"
+        app:showAsAction="withText"/>
 </menu>
