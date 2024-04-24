@@ -10,52 +10,23 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.dushkina.application.data.ApiConstants
 import ru.dushkina.application.data.MainRepository
 import ru.dushkina.application.data.TmdbApi
+import ru.dushkina.application.di.AppComponent
+import ru.dushkina.application.di.DaggerAppComponent
 import ru.dushkina.application.domain.Interactor
 import java.util.concurrent.TimeUnit
 
-class App: Application() {
-    lateinit var repo: MainRepository
-    lateinit var interactor: Interactor
-    lateinit var retrofitService: TmdbApi
+class App : Application() {
+    lateinit var dagger: AppComponent
 
     override fun onCreate() {
         super.onCreate()
-        //Инициализируем экземпляр App, через который будем получать доступ к остальным переменным
         instance = this
-        //Инициализируем репозиторий
-        repo = MainRepository()
-        //Создаём кастомный клиент
-        val okHttpClient = OkHttpClient.Builder()
-            //Настраиваем таймауты для медленного интернета
-            .callTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            //Добавляем логгер
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                if (BuildConfig.DEBUG) {
-                    level = HttpLoggingInterceptor.Level.BASIC
-                }
-            })
-            .build()
-        //Создаем Ретрофит
-        val retrofit = Retrofit.Builder()
-            //Указываем базовый URL из констант
-            .baseUrl(ApiConstants.BASE_URL)
-            //Добавляем конвертер
-            .addConverterFactory(GsonConverterFactory.create())
-            //Добавляем кастомный клиент
-            .client(okHttpClient)
-            .build()
-//Создаем сам сервис с методами для запросов
-        retrofitService = retrofit.create(TmdbApi::class.java)
-//Инициализируем интерактор
-        interactor = Interactor(repo, retrofitService)
+        //Создаем компонент
+        dagger = DaggerAppComponent.create()
     }
 
     companion object {
-        //Здесь статически хранится ссылка на экземпляр App
         lateinit var instance: App
-            //Приватный сеттер, чтобы нельзя было в эту переменную присвоить что-либо другое
             private set
     }
-
 }
