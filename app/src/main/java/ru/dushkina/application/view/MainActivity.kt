@@ -1,6 +1,8 @@
 package ru.dushkina.application.view
 
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -15,6 +17,8 @@ import ru.dushkina.application.view.fragments.HomeFragment
 import ru.dushkina.application.view.fragments.SelectionsFragment
 import ru.dushkina.application.view.fragments.SettingsFragment
 import ru.dushkina.application.view.fragments.WatchLaterFragment
+import ru.dushkina.application.viewmodel.HomeFragmentViewModel
+import java.util.Locale.Category
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,7 +36,8 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.fragment_placeholder, HomeFragment())
             .addToBackStack(null)
             .commit()
-        
+
+
         binding.topAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.settings -> {

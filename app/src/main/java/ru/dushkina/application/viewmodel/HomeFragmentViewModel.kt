@@ -1,5 +1,7 @@
 package ru.dushkina.application.viewmodel
 
+import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.dushkina.application.App
@@ -24,7 +26,7 @@ class HomeFragmentViewModel: ViewModel() {
                 filmsListLiveData.postValue(films)
             }
             override fun onFailure() {
-                
+                filmsListLiveData.postValue(interactor.getFilmsFromDB())
             }
         })
     }
