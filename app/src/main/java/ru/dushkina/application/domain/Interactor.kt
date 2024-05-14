@@ -3,11 +3,12 @@ package ru.dushkina.application.domain
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.dushkina.application.data.Entity.API
-import ru.dushkina.application.data.Entity.TmdbResultsDto
+import ru.dushkina.application.data.entity.API
+import ru.dushkina.application.data.entity.TmdbResultsDto
 import ru.dushkina.application.data.MainRepository
 import ru.dushkina.application.data.PreferenceProvider
 import ru.dushkina.application.data.TmdbApi
+import ru.dushkina.application.data.entity.Film
 import ru.dushkina.application.utils.Converter
 import ru.dushkina.application.viewmodel.HomeFragmentViewModel
 
@@ -23,9 +24,7 @@ class Interactor(private val repo: MainRepository, private val retrofitService: 
                 //При успехе мы вызываем метод передаем onSuccess и в этот коллбэк список фильмов
                 val list = Converter.convertApiListToDtoList(response.body()?.tmdbFilms)
                 //Кладем фильмы в БД
-                list.forEach {
-                    repo.putToDb(film = it)
-                }
+                    repo.putToDb(list)
                 callback.onSuccess(list)
             }
 

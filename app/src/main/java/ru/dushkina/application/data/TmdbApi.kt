@@ -4,7 +4,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import ru.dushkina.application.data.Entity.TmdbResultsDto
+import ru.dushkina.application.data.entity.TmdbResultsDto
 
 interface TmdbApi {
     @GET("3/movie/{category}")

@@ -9,15 +9,13 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.dushkina.application.view.rv_adapters.FilmListRecyclerAdapter
 import ru.dushkina.application.view.MainActivity
-import ru.dushkina.application.R
 import ru.dushkina.application.view.rv_adapters.TopSpacingItemDecoration
 import ru.dushkina.application.databinding.FragmentHomeBinding
-import ru.dushkina.application.domain.Film
+import ru.dushkina.application.data.entity.Film
 import ru.dushkina.application.utils.AnimationHelper
 import ru.dushkina.application.viewmodel.HomeFragmentViewModel
 import java.util.Locale

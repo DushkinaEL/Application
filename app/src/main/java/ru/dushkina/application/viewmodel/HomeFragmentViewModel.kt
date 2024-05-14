@@ -1,12 +1,11 @@
 package ru.dushkina.application.viewmodel
 
-import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.dushkina.application.App
-import ru.dushkina.application.domain.Film
+import ru.dushkina.application.data.entity.Film
 import ru.dushkina.application.domain.Interactor
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class HomeFragmentViewModel: ViewModel() {
@@ -26,7 +25,9 @@ class HomeFragmentViewModel: ViewModel() {
                 filmsListLiveData.postValue(films)
             }
             override fun onFailure() {
-                filmsListLiveData.postValue(interactor.getFilmsFromDB())
+                Executors.newSingleThreadExecutor().execute {
+                    filmsListLiveData.postValue(interactor.getFilmsFromDB())
+                }
             }
         })
     }
