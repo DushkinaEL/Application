@@ -1,6 +1,7 @@
 package ru.dushkina.application.data
 
 
+import androidx.lifecycle.LiveData
 import ru.dushkina.application.data.DAO.FilmDao
 import ru.dushkina.application.data.entity.Film
 import java.util.concurrent.Executors
@@ -15,7 +16,5 @@ class MainRepository(private val filmDao: FilmDao) {
         }
     }
 
-    fun getAllFromDB(): List<Film> {
-        return filmDao.getCachedFilms()
-    }
+    fun getAllFromDB(): LiveData<List<Film>> = filmDao.getCachedFilms()
 }
