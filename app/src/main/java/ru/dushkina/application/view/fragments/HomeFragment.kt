@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -42,6 +43,11 @@ class HomeFragment : Fragment() {
             filmsAdapter.addItems(field)
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,79 +58,91 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        view?.setOnClickListener{
+        view?.setOnClickListener {
             val a = activity as FragmentActivity
-            a.supportFragmentManager.beginTransaction().replace(com.google.android.material.R.id.container, DetailsFragment()).addToBackStack("MainFragment").commit()
+            a.supportFragmentManager.beginTransaction()
+                .replace(com.google.android.material.R.id.container, DetailsFragment())
+                .addToBackStack("MainFragment").commit()
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // подписываемся на изменения viewModel
-        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer <List<Film>> {
+        AnimationHelper.performFragmentCircularRevealAnimation(
+            binding.homeFragmentRoot,
+            requireActivity(),
+            1
+        )
+
+        initSearchView()
+        initPullToRefresh()
+        initRecycler()
+        //Кладем БД в RV
+        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
             filmsDataBase = it
+            filmsAdapter.addItems(it)
+
+            viewModel.showProgressBar.observe(viewLifecycleOwner, Observer<Boolean> {
+                binding.progressBar.isVisible = it
+            })
         })
+    }
 
-        fun initPullToRefresh() {
-            //Вешаем слушатель, чтобы вызвался pull to refresh
-            binding.pullToRefresh.setOnRefreshListener{
-                //Чистим адаптер(items нужно будет сделать паблик или создать для этого публичный метод)
-                filmsAdapter.items.clear()
-                //Делаем новый запрос фильмов на сервер
-                viewModel.getFilms()
-                //Убираем крутящееся колечко
-                binding.pullToRefresh.isRefreshing = false
-            }
-        }
 
-        AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot,  requireActivity(), 1)
-
-            with(binding) {
-                // Для работы при нажатии на поле для поиска
-                searchView.setOnClickListener {
-                    searchView.isIconified = false
-                }
-                //Подключаем слушателя изменений введенного текста в поле для поиска
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-                    androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                    //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        return true
-                    }
-
-                    //Этот метод отрабатывает на каждое изменение текста
-                    override fun onQueryTextChange(newText: String): Boolean {
-
-                        //Если ввод пуст, то вставляем в адаптер всю БД
-                        if (newText.isEmpty()) {
-                            filmsAdapter.addItems(filmsDataBase)
-                            return true
-                        }
-                        //Фильтруем список на поиск подходящих сочетаний
-                        val result = filmsDataBase.filter {
-                            //Приводим запрос и имя фильма к нижнему регистру
-                            it.title.toLowerCase(Locale.getDefault()).contains(
-                                newText.toLowerCase(
-                                    Locale.getDefault()
-                                )
-                            )
-                        }
-                        //Добавляем в адаптер
-                        filmsAdapter.addItems(result)
-                        return true
-                    }
-                })
-                //Находим наш RV
-                initRecycler()
-                //Кладем БД в RV
-                viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
-                    filmsDataBase = it
-                    filmsAdapter.addItems(it)
-                })
+    fun initPullToRefresh() {
+        //Вешаем слушатель, чтобы вызвался pull to refresh
+        binding.pullToRefresh.setOnRefreshListener {
+            //Чистим адаптер(items нужно будет сделать паблик или создать для этого публичный метод)
+            filmsAdapter.items.clear()
+            //Делаем новый запрос фильмов на сервер
+            viewModel.getFilms()
+            //Убираем крутящееся колечко
+            binding.pullToRefresh.isRefreshing = false
         }
     }
-        private fun initRecycler() {
+
+    fun initSearchView() {
+        with(binding) {
+            // Для работы при нажатии на поле для поиска
+            searchView.setOnClickListener {
+                searchView.isIconified = false
+            }
+            //Подключаем слушателя изменений введенного текста в поле для поиска
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
+
+                //Этот метод отрабатывает на каждое изменение текста
+                override fun onQueryTextChange(newText: String): Boolean {
+
+                    //Если ввод пуст, то вставляем в адаптер всю БД
+                    if (newText.isEmpty()) {
+                        filmsAdapter.addItems(filmsDataBase)
+                        return true
+                    }
+                    //Фильтруем список на поиск подходящих сочетаний
+                    val result = filmsDataBase.filter {
+                        //Приводим запрос и имя фильма к нижнему регистру
+                        it.title.toLowerCase(Locale.getDefault()).contains(
+                            newText.toLowerCase(
+                                Locale.getDefault()
+                            )
+                        )
+                    }
+                    //Добавляем в адаптер
+                    filmsAdapter.addItems(result)
+                    return true
+                }
+            })
+        }
+    }
+
+
+         fun initRecycler() {
             binding.mainRecycler.apply {
                 filmsAdapter =
                     FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
