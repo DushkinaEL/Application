@@ -1,38 +1,41 @@
 package ru.dushkina.application.viewmodel
 
-import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.dushkina.application.App
-import ru.dushkina.application.domain.Film
+import ru.dushkina.application.data.entity.Film
 import ru.dushkina.application.domain.Interactor
 import javax.inject.Inject
 
 class HomeFragmentViewModel: ViewModel() {
-    val filmsListLiveData: MutableLiveData<List<Film>> = MutableLiveData()
+    val showProgressBar: MutableLiveData<Boolean> = MutableLiveData()
     //Инициализируем интерактор
 
 
     @Inject
     lateinit var interactor: Interactor
+    val filmsListLiveData: LiveData<List<Film>>
     init {
         App.instance.dagger.inject(this)
+        filmsListLiveData = interactor.getFilmsFromDB()
         getFilms()
     }
     fun getFilms() {
+        showProgressBar.postValue(true)
         interactor.getFilmsFromApi(1, object : ApiCallback{
-            override fun onSuccess(films: List<Film>) {
-                filmsListLiveData.postValue(films)
+            override fun onSuccess() {
+                showProgressBar.postValue(false)
             }
             override fun onFailure() {
-                filmsListLiveData.postValue(interactor.getFilmsFromDB())
+
+                showProgressBar.postValue(false)
             }
         })
     }
 
     interface ApiCallback {
-        fun onSuccess(films: List<Film>)
+        fun onSuccess()
         fun onFailure()
         
     }

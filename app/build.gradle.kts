@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "ru.dushkina.application"
-    compileSdk = 33
+    compileSdk = 34
 
         buildFeatures {
             viewBinding = true
@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+    val room_version = "2.6.1"
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -75,4 +76,9 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:3.12.6")
     implementation ("com.google.dagger:dagger:2.51.1")
     kapt ("com.google.dagger:dagger-compiler:2.51.1")
+    //Room
+    implementation ("androidx.room:room-runtime:$room_version")
+    kapt ("androidx.room:room-compiler:$room_version")
+
+    implementation ("androidx.fragment:fragment-ktx:1.2.5")
 }
