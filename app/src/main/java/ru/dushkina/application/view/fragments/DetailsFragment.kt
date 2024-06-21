@@ -129,7 +129,7 @@ class DetailsFragment : Fragment() {
             //Выводим снекбар с кнопкой перейти в галерею
             Snackbar.make(
                 binding.root,
-                R.string.downloaded_to_gallery
+                R.string.downloaded_to_gallery,
                 Snackbar.LENGTH_LONG
             )
                 .setAction(R.string.open) {
@@ -191,7 +191,7 @@ class DetailsFragment : Fragment() {
             //Открываем канал для записи на диск
             val outputStream = contentResolver.openOutputStream(uri!!)
             //Передаем нашу картинку, может сделать компрессию
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream?.let { bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it) }
             //Закрываем поток
             outputStream?.close()
         } else {
