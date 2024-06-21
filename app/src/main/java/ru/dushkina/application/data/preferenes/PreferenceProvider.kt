@@ -1,4 +1,4 @@
-package ru.dushkina.application.data
+package ru.dushkina.application.data.preferenes
 
 import android.content.Context
 import android.content.SharedPreferences

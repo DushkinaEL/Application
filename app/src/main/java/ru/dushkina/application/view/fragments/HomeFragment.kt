@@ -12,25 +12,29 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.dushkina.application.view.rv_adapters.FilmListRecyclerAdapter
 import ru.dushkina.application.view.MainActivity
 import ru.dushkina.application.view.rv_adapters.TopSpacingItemDecoration
 import ru.dushkina.application.databinding.FragmentHomeBinding
-import ru.dushkina.application.data.entity.Film
+import ru.dushkina.application.data.Entity.Film
 import ru.dushkina.application.utils.AnimationHelper
 import ru.dushkina.application.viewmodel.HomeFragmentViewModel
 import java.util.Locale
 
 class HomeFragment : Fragment() {
-
+    private val viewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
+    }
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding
         get() = _binding!!
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
-
-    private val viewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
-    }
+    private lateinit var scope: CoroutineScope
 
     private var filmsDataBase = listOf<Film>()
         //Используем backing field
@@ -56,15 +60,15 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-        view?.setOnClickListener {
-            val a = activity as FragmentActivity
-            a.supportFragmentManager.beginTransaction()
-                .replace(com.google.android.material.R.id.container, DetailsFragment())
-                .addToBackStack("MainFragment").commit()
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        view?.setOnClickListener {
+//            val a = activity as FragmentActivity
+//            a.supportFragmentManager.beginTransaction()
+//                .replace(com.google.android.material.R.id.container, DetailsFragment())
+//                .addToBackStack("MainFragment").commit()
+//        }
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,15 +83,29 @@ class HomeFragment : Fragment() {
         initPullToRefresh()
         initRecycler()
         //Кладем БД в RV
-        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
-            filmsDataBase = it
-            filmsAdapter.addItems(it)
-
-            viewModel.showProgressBar.observe(viewLifecycleOwner, Observer<Boolean> {
-                binding.progressBar.isVisible = it
-            })
-        })
+        scope = CoroutineScope(Dispatchers.IO).also { scope ->
+            scope.launch {
+                viewModel.filmsListData.collect {
+                    withContext(Dispatchers.Main) {
+                        filmsAdapter.addItems(it)
+                        filmsDataBase = it
+                    }
+                }
+            }
+            scope.launch {
+                for (element in viewModel.showProgressBar) {
+                    launch(Dispatchers.Main) {
+                        binding.progressBar.isVisible = element
+                    }
+                }
+            }
+        }
     }
+    override fun onStop() {
+        super.onStop()
+        scope.cancel()
+    }
+
 
 
     fun initPullToRefresh() {

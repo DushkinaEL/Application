@@ -1,4 +1,4 @@
-package ru.dushkina.application.data.entity
+package ru.dushkina.application.data.Entity
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

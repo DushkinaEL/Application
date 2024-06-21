@@ -1,4 +1,4 @@
-package ru.dushkina.application.data.entity
+package ru.dushkina.application.data.Entity
 
 import com.google.gson.annotations.SerializedName
 

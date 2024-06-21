@@ -8,7 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import ru.dushkina.application.R
 import ru.dushkina.application.databinding.ActivityMainBinding
-import ru.dushkina.application.data.entity.Film
+import ru.dushkina.application.data.Entity.Film
 import ru.dushkina.application.view.fragments.DetailsFragment
 import ru.dushkina.application.view.fragments.FavoriteFragment
 import ru.dushkina.application.view.fragments.HomeFragment
