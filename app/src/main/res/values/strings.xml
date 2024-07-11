@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Application</string>
+    <string name="app_name">MovieFinder</string>
     <string name="menu">Меню</string>
     <string name="favorite">Избранное</string>
     <string name="watchLater">Посмотреть позже</string>
