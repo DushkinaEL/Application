@@ -153,21 +153,3 @@ class HomeFragment : Fragment() {
             })
         }
     }
-
-
-         fun initRecycler() {
-            binding.mainRecycler.apply {
-                filmsAdapter =
-                    FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
-                        override fun click(film: Film) {
-                            (requireContext() as MainActivity).launchDetailsFragment(film)
-                        }
-                    })
-                adapter = filmsAdapter
-                layoutManager = LinearLayoutManager(requireContext())
-                val decorator = TopSpacingItemDecoration(8)
-                addItemDecoration(decorator)
-            }
-        }
-    }
-
