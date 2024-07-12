@@ -9,20 +9,18 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import ru.dushkina.application.view.rv_adapters.FilmListRecyclerAdapter
 import ru.dushkina.application.view.MainActivity
 import ru.dushkina.application.view.rv_adapters.TopSpacingItemDecoration
 import ru.dushkina.application.databinding.FragmentHomeBinding
 import ru.dushkina.application.data.Entity.Film
 import ru.dushkina.application.utils.AnimationHelper
+import ru.dushkina.application.utils.AutoDisposable
+import ru.dushkina.application.utils.addTo
 import ru.dushkina.application.viewmodel.HomeFragmentViewModel
 import java.util.Locale
 
@@ -34,7 +32,7 @@ class HomeFragment : Fragment() {
     private val binding: FragmentHomeBinding
         get() = _binding!!
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
-    private lateinit var scope: CoroutineScope
+    private val autoDisposable = AutoDisposable()
 
     private var filmsDataBase = listOf<Film>()
         //Используем backing field
@@ -50,6 +48,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
+        autoDisposable.bindTo(lifecycle)
     }
 
     override fun onCreateView(
@@ -60,15 +59,15 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        view?.setOnClickListener {
-//            val a = activity as FragmentActivity
-//            a.supportFragmentManager.beginTransaction()
-//                .replace(com.google.android.material.R.id.container, DetailsFragment())
-//                .addToBackStack("MainFragment").commit()
-//        }
-//    }
+    override fun onStart() {
+        super.onStart()
+        view?.setOnClickListener {
+            val a = activity as FragmentActivity
+            a.supportFragmentManager.beginTransaction()
+                .replace(com.google.android.material.R.id.container, DetailsFragment())
+                .addToBackStack("MainFragment").commit()
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,29 +82,25 @@ class HomeFragment : Fragment() {
         initPullToRefresh()
         initRecycler()
         //Кладем БД в RV
-        scope = CoroutineScope(Dispatchers.IO).also { scope ->
-            scope.launch {
-                viewModel.filmsListData.collect {
-                    withContext(Dispatchers.Main) {
-                        filmsAdapter.addItems(it)
-                        filmsDataBase = it
-                    }
-                }
-            }
-            scope.launch {
-                for (element in viewModel.showProgressBar) {
-                    launch(Dispatchers.Main) {
-                        binding.progressBar.isVisible = element
-                    }
-                }
-            }
-        }
-    }
-    override fun onStop() {
-        super.onStop()
-        scope.cancel()
-    }
 
+        viewModel.filmsListData
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { list ->
+                filmsAdapter.addItems(list)
+                filmsDataBase = list
+
+            }
+            .addTo(autoDisposable)
+
+    viewModel.showProgressBar
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe{
+        binding.progressBar.isVisible = it
+    }
+    .addTo(autoDisposable)
+}
 
 
     fun initPullToRefresh() {

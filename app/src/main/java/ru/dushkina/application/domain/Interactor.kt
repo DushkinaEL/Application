@@ -1,11 +1,10 @@
 package ru.dushkina.application.domain
 
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import ru.dushkina.application.data.Entity.TmdbResults
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,15 +16,12 @@ import ru.dushkina.application.data.Entity.Film
 import ru.dushkina.application.utils.Converter
 
 class Interactor(private val repo: MainRepository, private val retrofitService: TmdbApi, private val preferences: PreferenceProvider) {
-    val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-    val progressBarState = Channel<Boolean>(Channel.CONFLATED)
+    var progressBarState: BehaviorSubject<Boolean> = BehaviorSubject.create()
     //В конструктор мы будем передавать коллбэк из вью модели, чтобы реагировать на то, когда фильмы будут получены
     //и страницу, которую нужно загрузить (это для пагинации)
     fun getFilmsFromApi(page: Int) {
         //Показываем ProgressBar
-        scope.launch {
-            progressBarState.send(true)
-        }
+            progressBarState.onNext(true)
         //Метод getDefaultCategoryFromPreferences() будет нам получать при каждом запросе нужный нам список фильмов
         retrofitService.getFilms(getDefaultCategoryFromPreferences(), API.apiKey, "ru-RU", page).enqueue(object :
             Callback<TmdbResults> {
@@ -34,20 +30,22 @@ class Interactor(private val repo: MainRepository, private val retrofitService: 
                 val list = Converter.convertApiListToDtoList(response.body()?.tmdbFilms)
                 //Кладем фильмы в БД
                 //В случае успешного ответа кладем фильмы в БД и выключаем ProgressBar
-                scope.launch {
-                    repo.putToDb(list)
-                    progressBarState.send(false)
+                Completable.fromSingle<List<Film>> {
+                     repo.putToDb(list)
                 }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe()
+                progressBarState.onNext(false)
+
             }
             override fun onFailure(call: Call<TmdbResults>, t: Throwable) {
-                //
-                scope.launch {
-                    progressBarState.send(false)
-                }
+                //Выключаем прогресс бар в случае провала
+                    progressBarState.onNext(false)
+
             }
         })
     }
-    fun getFilmsFromDB(): Flow<List<Film>> = repo.getAllFromDB()
+    fun getFilmsFromDB():Observable<List<Film>> = repo.getAllFromDB()
 
     //Метод для сохранения настроек
     fun saveDefaultCategoryToPreferences(category: String) {

@@ -1,7 +1,7 @@
 package ru.dushkina.application.data
 
 
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.rxjava3.core.Observable
 import ru.dushkina.application.data.DAO.FilmDao
 import ru.dushkina.application.data.Entity.Film
 
@@ -12,6 +12,6 @@ class MainRepository(private val filmDao: FilmDao) {
         filmDao.insertAll(films)
     }
 
-    fun getAllFromDB(): Flow<List<Film>> = filmDao.getCachedFilms()
+    fun getAllFromDB(): Observable<List<Film>> = filmDao.getCachedFilms()
 
 }
