@@ -22,7 +22,7 @@
             android:fitsSystemWindows="true"
             android:minHeight="60dp"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -56,21 +56,6 @@
         app:layout_anchorGravity="bottom|right"
         android:src="@drawable/baseline_share_24"
         android:tint="@color/white" />
-    
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <TextView
-            android:id="@+id/details_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            tools:text="@tools:sample/lorem/random"
-            android:textColor="@color/white"/>
-
-    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/details_fab_favorites"
@@ -83,5 +68,41 @@
         app:layout_anchorGravity="left|bottom"
         app:srcCompat="@drawable/baseline_favorite_"
         app:tint="@android:color/white"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/details_fab_download_wp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:borderWidth="0dp"
+        android:translationX="72dp"
+        android:backgroundTint="@color/colorPrimaryLight"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="left|bottom"
+        app:srcCompat="@drawable/baseline_download_24"
+        app:tint="@android:color/white"/>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:visibility="invisible"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:translationZ="10dp"
+        app:layout_anchor="@id/details_fab_download_wp"
+        app:layout_anchorGravity="center"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/details_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            tools:text="@tools:sample/lorem/random"
+            android:textColor="@color/white"/>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

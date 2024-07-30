@@ -1,7 +1,7 @@
 package ru.dushkina.application.utils
 
-import ru.dushkina.application.data.entity.TmdbFilm
-import ru.dushkina.application.data.entity.Film
+import ru.dushkina.application.data.Entity.TmdbFilm
+import ru.dushkina.application.data.Entity.Film
 
 object Converter {
     fun convertApiListToDtoList(list: List<TmdbFilm>?): List<Film> {

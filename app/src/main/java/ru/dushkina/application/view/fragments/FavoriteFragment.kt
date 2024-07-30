@@ -10,7 +10,7 @@ import ru.dushkina.application.view.rv_adapters.FilmListRecyclerAdapter
 import ru.dushkina.application.view.MainActivity
 import ru.dushkina.application.view.rv_adapters.TopSpacingItemDecoration
 import ru.dushkina.application.databinding.FragmentFavoriteBinding
-import ru.dushkina.application.data.entity.Film
+import ru.dushkina.application.data.Entity.Film
 import ru.dushkina.application.utils.AnimationHelper
 
 class FavoriteFragment : Fragment() {

@@ -1,8 +1,8 @@
-package ru.dushkina.application.data.entity
+package ru.dushkina.application.data.Entity
 
 import com.google.gson.annotations.SerializedName
 
-data class TmdbResultsDto(
+data class TmdbResults(
     @SerializedName("page")
     val page: Int,
     @SerializedName("results")

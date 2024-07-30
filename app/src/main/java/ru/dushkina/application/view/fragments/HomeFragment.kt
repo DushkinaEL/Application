@@ -9,28 +9,30 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import ru.dushkina.application.view.rv_adapters.FilmListRecyclerAdapter
 import ru.dushkina.application.view.MainActivity
 import ru.dushkina.application.view.rv_adapters.TopSpacingItemDecoration
 import ru.dushkina.application.databinding.FragmentHomeBinding
-import ru.dushkina.application.data.entity.Film
+import ru.dushkina.application.data.Entity.Film
 import ru.dushkina.application.utils.AnimationHelper
+import ru.dushkina.application.utils.AutoDisposable
+import ru.dushkina.application.utils.addTo
 import ru.dushkina.application.viewmodel.HomeFragmentViewModel
 import java.util.Locale
 
 class HomeFragment : Fragment() {
-
+    private val viewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
+    }
     private var _binding: FragmentHomeBinding? = null
     private val binding: FragmentHomeBinding
         get() = _binding!!
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
-
-    private val viewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
-    }
+    private val autoDisposable = AutoDisposable()
 
     private var filmsDataBase = listOf<Film>()
         //Используем backing field
@@ -46,6 +48,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
+        autoDisposable.bindTo(lifecycle)
     }
 
     override fun onCreateView(
@@ -58,9 +61,11 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        view?.setOnClickListener{
+        view?.setOnClickListener {
             val a = activity as FragmentActivity
-            a.supportFragmentManager.beginTransaction().replace(com.google.android.material.R.id.container, DetailsFragment()).addToBackStack("MainFragment").commit()
+            a.supportFragmentManager.beginTransaction()
+                .replace(com.google.android.material.R.id.container, DetailsFragment())
+                .addToBackStack("MainFragment").commit()
         }
     }
 
@@ -75,82 +80,76 @@ class HomeFragment : Fragment() {
 
         initSearchView()
         initPullToRefresh()
-        //
         initRecycler()
-        // подписываемся на изменения viewModel
-        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
-            filmsDataBase = it
-            filmsAdapter.addItems(it)
-        })
-        viewModel.showProgressBar.observe(viewLifecycleOwner, Observer<Boolean> {
-            binding.progressBar.isVisible = it
-        })
+        //Кладем БД в RV
 
+        viewModel.filmsListData
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { list ->
+                filmsAdapter.addItems(list)
+                filmsDataBase = list
 
-    }
-
-        fun initPullToRefresh() {
-            //Вешаем слушатель, чтобы вызвался pull to refresh
-            binding.pullToRefresh.setOnRefreshListener{
-                //Чистим адаптер(items нужно будет сделать паблик или создать для этого публичный метод)
-                filmsAdapter.items.clear()
-                //Делаем новый запрос фильмов на сервер
-                viewModel.getFilms()
-                //Убираем крутящееся колечко
-                binding.pullToRefresh.isRefreshing = false
             }
-        }
+            .addTo(autoDisposable)
 
-
-    private fun initSearchView() {
-        binding.searchView.setOnClickListener {
-            binding.searchView.isIconified = false
-        }
-
-        //Подключаем слушателя изменений введенного текста в поиска
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
-
-            //Этот метод отрабатывает на каждое изменения текста
-            override fun onQueryTextChange(newText: String): Boolean {
-                //Если ввод пуст то вставляем в адаптер всю БД
-                if (newText.isEmpty()) {
-                    filmsAdapter.addItems(filmsDataBase)
-                    return true
-                }
-                //Фильтруем список на поискк подходящих сочетаний
-                val result = filmsDataBase.filter {
-                    //Чтобы все работало правильно, нужно и запроси и имя фильма приводить к нижнему регистру
-                    it.title.toLowerCase(Locale.getDefault())
-                        .contains(newText.toLowerCase(Locale.getDefault()))
-                }
-                //Добавляем в адаптер
-                filmsAdapter.addItems(result)
-                return true
-            }
-        })
+    viewModel.showProgressBar
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe{
+        binding.progressBar.isVisible = it
     }
-
-    private fun initRecycler() {
-        binding.mainRecycler.apply {
-            filmsAdapter =
-                FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
-                    override fun click(film: Film) {
-                        (requireActivity() as MainActivity).launchDetailsFragment(film)
-                    }
-                })
-            //Присваиваем адаптер
-            adapter = filmsAdapter
-            //Присвои layoutmanager
-            layoutManager = LinearLayoutManager(requireContext())
-            //Применяем декоратор для отступов
-            val decorator = TopSpacingItemDecoration(8)
-            addItemDecoration(decorator)
-        }
-    }
+    .addTo(autoDisposable)
 }
 
+
+    fun initPullToRefresh() {
+        //Вешаем слушатель, чтобы вызвался pull to refresh
+        binding.pullToRefresh.setOnRefreshListener {
+            //Чистим адаптер(items нужно будет сделать паблик или создать для этого публичный метод)
+            filmsAdapter.items.clear()
+            //Делаем новый запрос фильмов на сервер
+            viewModel.getFilms()
+            //Убираем крутящееся колечко
+            binding.pullToRefresh.isRefreshing = false
+        }
+    }
+
+    fun initSearchView() {
+        with(binding) {
+            // Для работы при нажатии на поле для поиска
+            searchView.setOnClickListener {
+                searchView.isIconified = false
+            }
+            //Подключаем слушателя изменений введенного текста в поле для поиска
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+                androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
+
+                //Этот метод отрабатывает на каждое изменение текста
+                override fun onQueryTextChange(newText: String): Boolean {
+
+                    //Если ввод пуст, то вставляем в адаптер всю БД
+                    if (newText.isEmpty()) {
+                        filmsAdapter.addItems(filmsDataBase)
+                        return true
+                    }
+                    //Фильтруем список на поиск подходящих сочетаний
+                    val result = filmsDataBase.filter {
+                        //Приводим запрос и имя фильма к нижнему регистру
+                        it.title.toLowerCase(Locale.getDefault()).contains(
+                            newText.toLowerCase(
+                                Locale.getDefault()
+                            )
+                        )
+                    }
+                    //Добавляем в адаптер
+                    filmsAdapter.addItems(result)
+                    return true
+                }
+            })
+        }
+    }
