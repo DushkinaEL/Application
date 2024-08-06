@@ -15,6 +15,7 @@ import ru.dushkina.application.data.TmdbApi
 import ru.dushkina.application.data.Entity.Film
 import ru.dushkina.application.utils.Converter
 
+
 class Interactor(private val repo: MainRepository, private val retrofitService: TmdbApi, private val preferences: PreferenceProvider) {
     var progressBarState: BehaviorSubject<Boolean> = BehaviorSubject.create()
     //В конструктор мы будем передавать коллбэк из вью модели, чтобы реагировать на то, когда фильмы будут получены
@@ -50,6 +51,7 @@ class Interactor(private val repo: MainRepository, private val retrofitService: 
     fun getSearchResultFromApi(search: String): Observable<List<Film>> = retrofitService.getFilmFromSearch(API.apiKey, "ru-RU", search, 1)
         .map {
             Converter.convertApiListToDtoList(it.tmdbFilms)
+
         }
     //Метод для сохранения настроек
     fun saveDefaultCategoryToPreferences(category: String) {
