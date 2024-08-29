@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import ru.dushkina.application.data.MainRepository
 import ru.dushkina.application.data.preferenes.PreferenceProvider
-import ru.dushkina.application.data.TmdbApi
+import ru.dushkina.remote_module.TmdbApi
 import ru.dushkina.application.domain.Interactor
 import javax.inject.Singleton
 
@@ -22,5 +22,5 @@ class DomainModule (val context: Context){
     fun providePreferences(context: Context) = PreferenceProvider(context)
     @Singleton
     @Provides
-    fun provideInteractor(repository: MainRepository, tmdbApi: TmdbApi, preferenceProvider: PreferenceProvider) = Interactor(repo = repository, retrofitService = tmdbApi, preferences = preferenceProvider)
+    fun provideInteractor(repository: MainRepository, tmdbApi: ru.dushkina.remote_module.TmdbApi, preferenceProvider: PreferenceProvider) = Interactor(repo = repository, retrofitService = tmdbApi, preferences = preferenceProvider)
 }

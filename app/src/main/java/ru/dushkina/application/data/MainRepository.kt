@@ -1,7 +1,7 @@
 package ru.dushkina.application.data
 
 
-import io.reactivex.rxjava3.core.Observable
+import android.database.Observable
 import ru.dushkina.application.data.DAO.FilmDao
 import ru.dushkina.application.data.Entity.Film
 

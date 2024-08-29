@@ -4,10 +4,12 @@ import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
+
 import ru.dushkina.application.data.DAO.FilmDao
 import ru.dushkina.application.data.MainRepository
 import ru.dushkina.application.data.db.AppDatabase
 import javax.inject.Singleton
+
 
 @Module
 class DatabaseModule {

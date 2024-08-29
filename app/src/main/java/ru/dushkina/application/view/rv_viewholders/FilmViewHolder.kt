@@ -3,7 +3,7 @@ package ru.dushkina.application.view.rv_viewholders
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ru.dushkina.application.data.ApiConstants
+import ru.dushkina.remote_module.entity.ApiConstants
 import ru.dushkina.application.databinding.FilmItemBinding
 import ru.dushkina.application.data.Entity.Film
 
@@ -23,7 +23,7 @@ class FilmViewHolder(private var binding: FilmItemBinding) : RecyclerView.ViewHo
         //Указываем контейнер, в котором будет "жить" наша картинка
         Glide.with(itemView)
         //Загружаем сам ресурс
-            .load(ApiConstants.IMAGES_URL + "w342" + film.poster)
+            .load(ru.dushkina.remote_module.entity.ApiConstants.IMAGES_URL + "w342" + film.poster)
         //Центруем изображение
             .centerCrop()
             //Указываем ImageView, куда будем загружать изображение

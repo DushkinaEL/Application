@@ -25,7 +25,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import ru.dushkina.application.R
-import ru.dushkina.application.data.ApiConstants
+import ru.dushkina.remote_module.entity.ApiConstants
 import ru.dushkina.application.databinding.FragmentDetailsBinding
 import ru.dushkina.application.data.Entity.Film
 import ru.dushkina.application.viewmodel.DetailsFragmentViewModel
@@ -95,7 +95,7 @@ class DetailsFragment : Fragment() {
         binding.detailsToolbar.title = film.title
         //Устанавливаем картинку
         Glide.with(this)
-            .load(ApiConstants.IMAGES_URL + "w780" + film.poster)
+            .load(ru.dushkina.remote_module.entity.ApiConstants.IMAGES_URL + "w780" + film.poster)
             .centerCrop()
             .into(binding.detailsPoster)
         //Устанавливаем описание
@@ -120,7 +120,7 @@ class DetailsFragment : Fragment() {
             binding.progressBar.isVisible = true
             //Создаем через async так как нам нужен результат от работы, то есть Bitmap
             val job = scope.async {
-                viewModel.loadWallpaper(ApiConstants.IMAGES_URL + "original" + film.poster)
+                viewModel.loadWallpaper(ru.dushkina.remote_module.entity.ApiConstants.IMAGES_URL + "original" + film.poster)
             }
             //Сохраняем в галерею, как только файл загрузится
             saveToGallery(job.await())

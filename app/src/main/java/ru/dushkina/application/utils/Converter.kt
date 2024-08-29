@@ -1,10 +1,10 @@
 package ru.dushkina.application.utils
 
-import ru.dushkina.application.data.Entity.TmdbFilm
+import ru.dushkina.remote_module.entity.TmdbFilm
 import ru.dushkina.application.data.Entity.Film
 
 object Converter {
-    fun convertApiListToDtoList(list: List<TmdbFilm>?): List<Film> {
+    fun convertApiListToDtoList(list: List<ru.dushkina.remote_module.entity.TmdbFilm>?): List<Film> {
         val result = mutableListOf<Film>()
         list?.forEach{
             result.add(
