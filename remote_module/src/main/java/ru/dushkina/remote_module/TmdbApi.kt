@@ -1,20 +1,21 @@
-package ru.dushkina.application.data
+package ru.dushkina.remote_module
 
 import io.reactivex.rxjava3.core.Observable
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import ru.dushkina.application.data.Entity.TmdbResults
+import ru.dushkina.remote_module.entity.ApiConstants
+import ru.dushkina.remote_module.entity.TmdbResults
+
 
 interface TmdbApi {
     @GET("3/movie/{category}")
     fun getFilms(
         @Path("category") category: String,
-        @Query("api_key") apiKey: String,
+        @Query("api_key") apiKey: String ,
         @Query("language") language: String,
         @Query("page") page: Int
-    ): Call<TmdbResults>
+    ): Observable<TmdbResults>
 
     @GET("3/search/movie")
     fun getFilmFromSearch(

@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId = "ru.dushkina.application"
-        minSdk = 24
+        minSdk = 31
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -70,11 +70,14 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.11.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
     implementation ("com.airbnb.android:lottie:3.4.4")
+
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.6.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:3.12.6")
+
+    //Dagger
     implementation ("com.google.dagger:dagger:2.51.1")
     kapt ("com.google.dagger:dagger-compiler:2.51.1")
+
     //Room
     val room_version = "2.6.1"
     implementation ("androidx.room:room-runtime:$room_version")
@@ -86,4 +89,6 @@ dependencies {
     implementation ("io.reactivex.rxjava3:rxjava:3.0.10")
     implementation ("com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0")
     implementation ("io.reactivex.rxjava3:rxkotlin:3.0.1")
+
+    implementation(project(":remote_module"))
 }
