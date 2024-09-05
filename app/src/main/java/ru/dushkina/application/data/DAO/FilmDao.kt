@@ -14,7 +14,9 @@ import ru.dushkina.application.data.Entity.Film
 interface FilmDao {
     //Запрос на всю таблицу
     @Query("SELECT * FROM cached_films")
+
     fun getCachedFilms(): Observable<List<Film>>
+
 
     //Кладём списком в БД, в случае конфликта перезаписываем
     @Insert(onConflict = OnConflictStrategy.REPLACE)
