@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Application"
 include(":app")
- 
+include(":remote_module")

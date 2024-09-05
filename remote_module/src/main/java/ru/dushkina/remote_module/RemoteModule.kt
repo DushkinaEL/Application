@@ -1,6 +1,6 @@
-package ru.dushkina.application.di.modules
+package ru.dushkina.remote_module
 
-import com.airbnb.lottie.BuildConfig
+
 import dagger.Module
 import dagger.Provides
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
@@ -8,8 +8,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.dushkina.application.data.ApiConstants
-import ru.dushkina.application.data.TmdbApi
+import ru.dushkina.remote_module.entity.ApiConstants
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 

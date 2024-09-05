@@ -3,16 +3,16 @@ package ru.dushkina.application.di
 import dagger.Component
 import ru.dushkina.application.di.modules.DatabaseModule
 import ru.dushkina.application.di.modules.DomainModule
-import ru.dushkina.application.di.modules.RemoteModule
 import ru.dushkina.application.viewmodel.HomeFragmentViewModel
 import ru.dushkina.application.viewmodel.SettingsFragmentViewModel
+import ru.dushkina.remote_module.RemoteProvider
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     //Внедряем все модули, нужные для этого компонента
+    dependencies = [RemoteProvider::class],
     modules = [
-        RemoteModule::class,
         DatabaseModule::class,
         DomainModule::class
     ]
