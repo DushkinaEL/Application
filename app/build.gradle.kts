@@ -11,6 +11,7 @@ android {
 
         buildFeatures {
             viewBinding = true
+            buildConfig = true
         }
 
     compileOptions {
@@ -25,7 +26,7 @@ android {
     defaultConfig {
         applicationId = "ru.dushkina.application"
         minSdk = 31
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -52,7 +53,6 @@ android {
 }
 
 dependencies {
-    val room_version = "2.6.1"
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
@@ -75,10 +75,6 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.6.0")
 
-    //Dagger
-    implementation ("com.google.dagger:dagger:2.51.1")
-    kapt ("com.google.dagger:dagger-compiler:2.51.1")
-
     //Room
 
     val room_version = "2.6.1"
@@ -92,5 +88,10 @@ dependencies {
     implementation ("com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0")
     implementation ("io.reactivex.rxjava3:rxkotlin:3.0.1")
 
+    implementation ("com.google.dagger:dagger:2.51.1")
+    kapt ("com.google.dagger:dagger-compiler:2.51.1")
+
     implementation(project(":remote_module"))
+
+
 }
