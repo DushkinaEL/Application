@@ -1,6 +1,4 @@
 package ru.dushkina.application.domain
-
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -11,7 +9,7 @@ import ru.dushkina.application.data.preferenes.PreferenceProvider
 import ru.dushkina.remote_module.TmdbApi
 import ru.dushkina.application.data.Entity.Film
 import ru.dushkina.application.utils.Converter
-import ru.dushkina.remote_module.entity.TmdbResults
+
 
 
 class Interactor(private val repo: MainRepository, private val retrofitService: TmdbApi, private val preferences: PreferenceProvider) {

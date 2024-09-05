@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+    val room_version = "2.6.1"
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
@@ -79,6 +80,7 @@ dependencies {
     kapt ("com.google.dagger:dagger-compiler:2.51.1")
 
     //Room
+
     val room_version = "2.6.1"
     implementation ("androidx.room:room-runtime:$room_version")
     kapt ("androidx.room:room-compiler:$room_version")
