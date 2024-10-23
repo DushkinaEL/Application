@@ -1,6 +1,9 @@
 package ru.dushkina.application.view
 
 
+import android.content.BroadcastReceiver
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,6 +12,7 @@ import androidx.fragment.app.Fragment
 import ru.dushkina.application.R
 import ru.dushkina.application.databinding.ActivityMainBinding
 import ru.dushkina.application.data.Entity.Film
+import ru.dushkina.application.utils.ConnectionChecker
 import ru.dushkina.application.view.fragments.DetailsFragment
 import ru.dushkina.application.view.fragments.FavoriteFragment
 import ru.dushkina.application.view.fragments.HomeFragment
@@ -19,6 +23,7 @@ import ru.dushkina.application.view.fragments.WatchLaterFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var receiver: BroadcastReceiver
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +32,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        receiver = ConnectionChecker()
+        val filters = IntentFilter().apply {
+            addAction(Intent.ACTION_POWER_CONNECTED)
+            addAction(Intent.ACTION_BATTERY_LOW)
+        }
+        registerReceiver(receiver, filters)
+
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.fragment_placeholder, HomeFragment())
+            .add(R.id.fragment_container, HomeFragment())
             .addToBackStack(null)
             .commit()
 
@@ -92,6 +104,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
+    }
     //Ищем фрагмент по тегу, если он есть возвращаем его, если нет , то null
     fun checkFragmentExistence(tag: String): Fragment? =
         supportFragmentManager.findFragmentByTag(tag)
@@ -99,7 +116,7 @@ class MainActivity : AppCompatActivity() {
     fun changeFragment(fragment: Fragment, tag: String) {
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_placeholder, fragment, tag)
+            .replace(R.id.fragment_container, fragment, tag)
             .addToBackStack(null)
             .commit()
     }
@@ -114,7 +131,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_placeholder, fragment)
+            .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
 

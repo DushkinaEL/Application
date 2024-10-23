@@ -1,0 +1,1 @@
+ru.dushkina.remote_module
