@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import ru.dushkina.application.data.MainRepository
 import ru.dushkina.application.data.preferenes.PreferenceProvider
-import ru.dushkina.application.data.TmdbApi
+import ru.dushkina.remote_module.TmdbApi
 import ru.dushkina.application.domain.Interactor
 import javax.inject.Singleton
 
