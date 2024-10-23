@@ -26,8 +26,9 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import ru.dushkina.application.R
 import ru.dushkina.application.data.ApiConstants
-import ru.dushkina.application.databinding.FragmentDetailsBinding
+
 import ru.dushkina.application.data.Entity.Film
+import ru.dushkina.application.databinding.FragmentDetailsBinding
 import ru.dushkina.application.viewmodel.DetailsFragmentViewModel
 
 

@@ -17,6 +17,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableOnSubscribe
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
+import ru.dushkina.application.R
 import ru.dushkina.application.view.rv_adapters.FilmListRecyclerAdapter
 import ru.dushkina.application.view.MainActivity
 import ru.dushkina.application.view.rv_adapters.TopSpacingItemDecoration
@@ -59,7 +60,7 @@ class HomeFragment : Fragment() {
         view?.setOnClickListener {
             val a = activity as FragmentActivity
             a.supportFragmentManager.beginTransaction()
-                .replace(com.google.android.material.R.id.container, DetailsFragment())
+                .replace(R.id.fragment_container, DetailsFragment())
                 .addToBackStack("MainFragment").commit()
         }
     }
